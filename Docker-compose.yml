@@ -1,0 +1,29 @@
+version: '2.3'
+
+services:
+  torch21:
+    build:
+      context: .
+
+    image: torch21_worker
+    container_name: torch21
+    volumes:
+      - ./notebooks:/notebooks
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+      - NVIDIA_VISIBLE_DEVICES=1
+    runtime: nvidia
+    ports:
+      - 8000:80
+    networks:
+      - network_torch21
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: "nvidia"
+              count: 1
+              capabilities: [ gpu ]
+
+networks:
+  network_torch21:
